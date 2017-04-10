@@ -23,10 +23,10 @@ import sys
 
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0,parentdir)
-import roa_signature_composer
-import sha_hmac1 as mac1
+from . import roa_signature_composer
+from . import sha_hmac1 as mac1
 from ..utils import parameter_helper as helper
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 ACCEPT = "Accept"
 CONTENT_MD5 = "Content-MD5"
@@ -43,7 +43,7 @@ def refresh_sign_parameters(parameters, access_key_id, format="JSON", signer=mac
     return parameters
 
 def __build_query_string(uri, queries):
-    sorted_map = sorted(queries.items(), key=lambda queries:queries[0])
+    sorted_map = sorted(list(queries.items()), key=lambda queries:queries[0])
     if len(sorted_map) > 0:
         uri += "?"
         for (k,v) in sorted_map:
@@ -60,13 +60,13 @@ def compose_string_to_sign(method, queries, uri_pattern=None, headers=None, path
     sign_to_string = ""
     sign_to_string += method
     sign_to_string += HEADER_SEPARATOR
-    if headers.has_key(CONTENT_MD5) and headers[CONTENT_MD5] is not None:
+    if CONTENT_MD5 in headers and headers[CONTENT_MD5] is not None:
         sign_to_string += headers[CONTENT_MD5]
     sign_to_string += HEADER_SEPARATOR
-    if headers.has_key(CONTENT_TYPE) and headers[CONTENT_TYPE] is not None:
+    if CONTENT_TYPE in headers and headers[CONTENT_TYPE] is not None:
         sign_to_string += headers[CONTENT_TYPE]
     sign_to_string += HEADER_SEPARATOR
-    if headers.has_key(DATE) and headers[DATE] is not None:
+    if DATE in headers and headers[DATE] is not None:
         sign_to_string += headers[DATE]
     sign_to_string += HEADER_SEPARATOR
     sign_to_string += roa_signature_composer.build_canonical_headers(headers, "x-oss-")
@@ -92,7 +92,7 @@ def get_url(queries, uri_pattern, path_parameters):
     url += roa_signature_composer.replace_occupied_parameters(uri_pattern, path_parameters)
     if not url.endswith("?"):
         url += "?"
-    url += urllib.urlencode(queries)
+    url += urllib.parse.urlencode(queries)
     if url.endswith("?"):
         url = url[0:(len(url)-1)]
     return url

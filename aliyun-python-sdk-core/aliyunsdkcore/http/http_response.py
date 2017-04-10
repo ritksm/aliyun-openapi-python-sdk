@@ -17,10 +17,10 @@
 
 #coding=utf-8
 __author__='alex jiang'
-import httplib
+import http.client
 
-from http_request import HttpRequest
-import protocol_type as PT
+from .http_request import HttpRequest
+from . import protocol_type as PT
 
 
 class HttpResponse(HttpRequest):
@@ -59,7 +59,7 @@ class HttpResponse(HttpRequest):
 		if self.__port is None or self.__port == "":
 			self.__port = 80
 		try:
-			self.__connection=httplib.HTTPConnection(self.get_host(),self.__port)
+			self.__connection=http.client.HTTPConnection(self.get_host(),self.__port)
 			self.__connection.connect()
 			self.__connection.request(method=self.get_method(),url=self.get_url(),body=self.get_body(),
 			                          headers=self.get_headers())
@@ -73,7 +73,7 @@ class HttpResponse(HttpRequest):
 		if self.__port is None or self.__port == "":
 			self.__port = 80
 		try:
-			self.__connection=httplib.HTTPConnection(self.get_host(),self.__port)
+			self.__connection=http.client.HTTPConnection(self.get_host(),self.__port)
 			self.__connection.connect()
 			self.__connection.request(method=self.get_method(),url=self.get_url(),body=self.get_body(),
 			                          headers=self.get_headers())
@@ -88,7 +88,7 @@ class HttpResponse(HttpRequest):
 			self.__port = 443
 		try:
 			self.__port = 443
-			self.__connection=httplib.HTTPSConnection(self.get_host(),self.__port,cert_file=self.__cert_file,
+			self.__connection=http.client.HTTPSConnection(self.get_host(),self.__port,cert_file=self.__cert_file,
 			                                          key_file=self.__key_file)
 			self.__connection.connect()
 			self.__connection.request(method=self.get_method(),url=self.get_url(),body=self.get_body(),
@@ -104,7 +104,7 @@ class HttpResponse(HttpRequest):
 			self.__port = 443
 		try:
 			self.__port = 443
-			self.__connection=httplib.HTTPSConnection(self.get_host(),self.__port,cert_file=self.__cert_file,
+			self.__connection=http.client.HTTPSConnection(self.get_host(),self.__port,cert_file=self.__cert_file,
 			                                          key_file=self.__key_file)
 			self.__connection.connect()
 			self.__connection.request(method=self.get_method(),url=self.get_url(),body=self.get_body(),

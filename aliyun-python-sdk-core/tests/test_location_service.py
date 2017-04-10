@@ -34,9 +34,9 @@ location_service.set_location_service_attr(region='cn-beijing',
                                            product_name="Location",
                                            domain="location.aliyuncs.com")
 domain = location_service.find_product_domain(client.get_region_id(), 'oss');
-print domain
+print(domain)
 domain = location_service.find_product_domain(client.get_region_id(), 'oss');
-print domain
+print(domain)
 
 
 class DescribeRegionsRequest(RpcRequest):
@@ -51,5 +51,5 @@ class DescribeRegionsRequest(RpcRequest):
 
 request = DescribeRegionsRequest()
 status, headers, body = client.get_response(request)
-print status
-print body
+print(status)
+print(body)

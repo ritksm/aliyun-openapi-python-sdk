@@ -174,7 +174,7 @@ class AcsClient:
             # if _body is None:
             # 	raise exs.ClientException(error_code.SDK_SERVER_UNREACHABLE, error_msg.get_msg('SDK_SERVER_UNREACHABLE'))
             return _body
-        except IOError, e:
+        except IOError as e:
             raise exs.ClientException(error_code.SDK_SERVER_UNREACHABLE, error_msg.get_msg('SDK_SERVER_UNREACHABLE') + ': ' + str(e))
         except AttributeError:
             raise exs.ClientException(error_code.SDK_INVALID_REQUEST, error_msg.get_msg('SDK_INVALID_REQUEST'))
@@ -209,7 +209,7 @@ class AcsClient:
                                          content, self.__port)
             return _response.get_response_object()
 
-        except IOError, e:
+        except IOError as e:
             raise exs.ClientException(error_code.SDK_SERVER_UNREACHABLE, error_msg.get_msg('SDK_SERVER_UNREACHABLE') + ': ' + str(e))
         except AttributeError:
             raise exs.ClientException(error_code.SDK_INVALID_REQUEST, error_msg.get_msg('SDK_INVALID_REQUEST'))
@@ -219,7 +219,7 @@ class AcsClient:
             return None
         if params is None:
             return pattern
-        for (k, v) in params.items():
+        for (k, v) in list(params.items()):
             target = '[' + k + ']'
             pattern.replace(target, v)
         return pattern

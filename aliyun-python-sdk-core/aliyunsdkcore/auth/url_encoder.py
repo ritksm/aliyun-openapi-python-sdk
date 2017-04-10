@@ -18,7 +18,7 @@
 # under the License.
 
 #coding=utf-8
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import sys
 
 """
@@ -36,12 +36,12 @@ def get_encode_str(params):
 	:param params: dict parameters
 	:return: string
 	"""
-	list_params = sorted(params.iteritems(), key=lambda d: d[0])
-	encode_str = urllib.urlencode(list_params)
+	list_params = sorted(iter(params.items()), key=lambda d: d[0])
+	encode_str = urllib.parse.urlencode(list_params)
 	if sys.stdin.encoding is None:
-		res = urllib.quote(encode_str.decode('cp936').encode('utf8'), '')
+		res = urllib.parse.quote(encode_str.decode('cp936').encode('utf8'), '')
 	else:
-		res = urllib.quote(encode_str.decode(sys.stdin.encoding).encode('utf8'), '')
+		res = urllib.parse.quote(encode_str.decode(sys.stdin.encoding).encode('utf8'), '')
 	res = res.replace("+","%20")
 	res = res.replace("*","%2A")
 	res = res.replace("%7E","~")

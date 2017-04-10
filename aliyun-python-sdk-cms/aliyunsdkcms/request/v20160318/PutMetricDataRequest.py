@@ -139,8 +139,8 @@ class PutMetricDataRequest(RpcRequest):
 		dim = {}
 		try:
 			dim = json.loads(Dimensions)
-		except ValueError, e:
-			raise ValueError, 'Dimensions format error. Example:\'{"key":"value"}\''
+		except ValueError as e:
+			raise ValueError('Dimensions format error. Example:\'{"key":"value"}\'')
 		self.__dimensions=dim
 	
 	def get_Host(self):
@@ -163,6 +163,6 @@ class PutMetricDataRequest(RpcRequest):
 		values = {}
 		try:
 			values = json.loads(MetricValues)
-		except ValueError, e:
-			raise ValueError, 'MetricValues format error. Example:\'{"key":"value"}\''
+		except ValueError as e:
+			raise ValueError('MetricValues format error. Example:\'{"key":"value"}\'')
 		self.__metricValues=values

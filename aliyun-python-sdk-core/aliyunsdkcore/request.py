@@ -48,11 +48,10 @@ STYLE_ROA = 'ROA'
 STYLE_OSS = 'OSS'
 
 
-class AcsRequest:
+class AcsRequest(metaclass=abc.ABCMeta):
     """
     Acs request base class. This class wraps up common parameters for a request.
     """
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, product, version=None,
                  action_name=None,
@@ -240,7 +239,7 @@ class RpcRequest(AcsRequest):
 
     def get_url(self, region_id, ak, secret):
         sign_params = self.__get_sign_params()
-        if 'RegionId' not in sign_params.keys():
+        if 'RegionId' not in list(sign_params.keys()):
             sign_params['RegionId'] = region_id
         url = rpc_signer.get_signed_url(sign_params, ak, secret, self.get_accept_format(), self.get_method())
         return url
@@ -314,7 +313,7 @@ class RoaRequest(AcsRequest):
         if (self.get_content() is not None):
             md5_str = md5_tool.get_md5_base64_str(self.get_content())
             self.add_header('Content-MD5', md5_str)
-        if 'RegionId' not in sign_params.keys():
+        if 'RegionId' not in list(sign_params.keys()):
             sign_params['RegionId'] = region_id
         signed_headers = roa_signer.get_signature_headers(sign_params, ak, secret,
                                                           self.get_accept_format(),
@@ -331,7 +330,7 @@ class RoaRequest(AcsRequest):
         :return: String
         """
         sign_params = self.get_query_params()
-        if region_id not in sign_params.keys():
+        if region_id not in list(sign_params.keys()):
             sign_params['RegionId'] = region_id
         url = roa_signer.get_url(self.get_uri_pattern(), sign_params, self.get_path_params())
         return url
@@ -397,7 +396,7 @@ class OssRequest(AcsRequest):
         :return:
         """
         sign_params = self.get_query_params()
-        if 'RegionId' not in sign_params.keys():
+        if 'RegionId' not in list(sign_params.keys()):
             sign_params['RegionId'] = region_id
         signed_headers = oss_signer.get_signature_headers(sign_params, ak, secret, self.get_accept_format(),
                                                           self.get_headers(),
@@ -412,7 +411,7 @@ class OssRequest(AcsRequest):
         :return: String
         """
         sign_params = self.get_query_params()
-        if 'RegionId' not in sign_params.keys():
+        if 'RegionId' not in list(sign_params.keys()):
             sign_params['RegionId'] = region_id
         url = oss_signer.get_url(sign_params, self.get_uri_pattern(), self.get_path_params())
         return url

@@ -62,7 +62,7 @@ try:
 
         __endpoints[endpoint.getAttribute('name')] = dict(regions=region_list, products=product_list)
 
-except Exception, ex:
+except Exception as ex:
     raise ClientException(error_code.SDK_MISSING_ENDPOINTS_FILER, error_msg.get_msg('SDK_MISSING_ENDPOINTS_FILER'))
 
 
@@ -127,8 +127,8 @@ def convert_dict_to_endpointsxml(mdict):
     content += '</RegionIds>\n'+'<Products>\n'
     for item in products:
         content += '<Product>\n'
-        content += '<ProductName>'+item.keys()[0]+'</ProductName>\n'
-        content += '<DomainName>'+item[item.keys()[0]]+'</DomainName>\n'
+        content += '<ProductName>'+list(item.keys())[0]+'</ProductName>\n'
+        content += '<DomainName>'+item[list(item.keys())[0]]+'</DomainName>\n'
         content += '</Product>\n'
     content += '</Products>'
     content += endfix
@@ -139,8 +139,8 @@ def convert_dict_to_endpointsxml(mdict):
     try:
         f.write(''.join(content))
     except Exception as e:
-        print e
-        print "Please confirm you has use sudo + cmd"
+        print(e)
+        print("Please confirm you has use sudo + cmd")
     finally:
         f.close()
 
@@ -153,5 +153,5 @@ def _createFile(filename):
             pass
 
 if __name__ == '__main__':
-    print find_product_domain('cn-hangzhou', 'Rds')
+    print(find_product_domain('cn-hangzhou', 'Rds'))
     modify_point('ecs', 'cn-beijing-2', 'ecs.aliyuncs.com')
